@@ -1,0 +1,26 @@
+from fastapi import APIRouter
+from fastapi import Depends
+from app.utils.database import get_db
+from app.utils.auth_guard import get_current_user
+from sqlalchemy.orm import Session
+from app.models.user import User
+router = APIRouter()
+@router.get("/mobile/dashboard/")
+def mobile_dashboard(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    role = current_user.role
+
+    if role == "technician":
+        pending_tests = db.query(LabTest).filter(
+            LabTest.technician_id == current_user.id,
+            LabTest.status == "pending"
+        ).count()
+        return {"role": "technician", "pending_tests": pending_tests}
+
+    elif role == "admin":
+        total_patients = db.query(PatientEntry).count()
+        return {"role": "admin", "total_patients": total_patients}
+
+    return {"role": role, "message": "No dashboard available"}
