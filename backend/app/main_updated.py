@@ -15,24 +15,31 @@ from app.routes.export_routes import router as export_router
 from app.routes.analytics import router as analytics_router
 from app.routes.daily_entry import router as daily_entry_router
 
+# Import NEW modern feature routers
+from app.routes.doctor_management import router as doctor_router
+from app.routes.report_distribution import router as report_distribution_router
+from app.routes.ai_routes import router as ai_router
+
 # Create FastAPI app
 app = FastAPI(
     title="VaidyaVihar Diagnostic ERP API",
-    description="Comprehensive ERP system for diagnostic centers",
-    version="2.0.0"
+    description="Comprehensive ERP system for diagnostic centers with AI-powered features",
+    version="2.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc"
 )
 
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify actual origins
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-# Include routers
+# Include EXISTING routers
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(patient_router, prefix="/api/patients", tags=["Patients"])
 app.include_router(staff_router, prefix="/api/staff", tags=["Staff"])
@@ -41,9 +48,21 @@ app.include_router(export_router, prefix="/api/export", tags=["Export"])
 app.include_router(analytics_router, prefix="/api/analytics", tags=["Analytics"])
 app.include_router(daily_entry_router, prefix="/api/daily-entry", tags=["Daily Entry"])
 
+# Include NEW modern feature routers
+app.include_router(doctor_router, prefix="/api/doctors", tags=["Doctor Management"])
+app.include_router(report_distribution_router, prefix="/api/reports", tags=["Report Distribution"])
+app.include_router(ai_router, prefix="/api/ai", tags=["AI & Recommendations"])
+
+
 @app.get("/")
 async def root():
-    return {"message": "VaidyaVihar Diagnostic ERP API", "version": "2.0.0", "status": "running"}
+    return {
+        "message": "VaidyaVihar Diagnostic ERP API", 
+        "version": "2.0.0", 
+        "status": "running",
+        "docs": "/docs",
+        "health": "/health"
+    }
 
 @app.get("/health")
 async def health_check():
@@ -52,9 +71,25 @@ async def health_check():
         content={
             "status": "healthy",
             "timestamp": datetime.now().isoformat(),
-            "service": "VaidyaVihar Diagnostic ERP API"
+            "service": "VaidyaVihar Diagnostic ERP API",
+            "version": "2.0.0"
         }
     )
+
+@app.get("/api-info")
+async def api_info():
+    return {
+        "name": "VaidyaVihar Diagnostic ERP API",
+        "version": "2.0.0",
+        "modules": [
+            {"name": "Authentication", "endpoints": ["POST /api/auth/login", "POST /api/auth/register"]},
+            {"name": "Patients", "endpoints": ["GET/POST /api/patients/", "GET/PUT/DELETE /api/patients/{id}"]},
+            {"name": "Doctors (NEW)", "endpoints": ["GET/POST /api/doctors/", "City-wide doctor search"]},
+            {"name": "Report Distribution (NEW)", "endpoints": ["POST /api/reports/distribute", "GET /api/reports/pending-for-doctor/{id}"]},
+            {"name": "AI & Recommendations (NEW)", "endpoints": ["POST /api/ai/test-recommendations", "POST /api/ai/risk-assessment"]}
+        ]
+    }
+
 
 if __name__ == "__main__":
     uvicorn.run(
@@ -64,3 +99,4 @@ if __name__ == "__main__":
         reload=True,
         log_level="info"
     )
+

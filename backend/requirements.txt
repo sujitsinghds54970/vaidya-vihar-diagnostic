@@ -1,6 +1,117 @@
-fastapi
-uvicorn
-sqlalchemy
-psycopg2-binary
-python-jose
-pydantic
+
+# FastAPI and ASGI
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+
+# Database
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+alembic>=1.11.0
+
+# Authentication & Security
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.6
+python-dotenv>=1.0.0
+
+# Data Processing
+openpyxl>=3.1.0
+pandas>=2.0.0
+reportlab>=4.0.0
+xlsxwriter>=3.1.0
+
+# HTTP Client
+httpx>=0.24.0
+requests>=2.31.0
+
+# CORS
+fastapi-cors>=0.0.3
+
+# Date/Time
+python-dateutil>=2.8.0
+
+# Environment Management
+python-dotenv>=1.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+httpx[test]>=0.24.0
+
+# Development
+black>=23.0.0
+isort>=5.12.0
+flake8>=6.0.0
+
+# =============================================================================
+# MODERN FEATURES - Added for World-Class Diagnostic ERP
+# =============================================================================
+
+# WebSocket Support
+websockets>=12.0
+sse-starlette>=1.6.0
+
+# SMS Integration (Twilio)
+twilio>=8.0.0
+
+# WhatsApp Integration
+pywhatkit>=5.4
+
+# Push Notifications
+webpush>=0.7.0
+pywebpush>=1.14.0
+
+# Redis Caching
+redis>=4.5.0
+aioredis>=2.0.0
+
+# Rate Limiting
+slowapi>=0.1.8
+redis>=4.5.0
+
+# GraphQL API
+strawberry-graphql[fastapi]>=0.200.0
+
+# AI/ML Features
+scikit-learn>=1.2.0
+numpy>=1.24.0
+pandas>=2.0.0
+
+# QR Code Generation
+qrcode>=7.4.0
+pillow>=9.5.0
+
+# DICOM Support (Medical Imaging)
+pydicom>=2.4.0
+
+# Document Processing
+python-magic>=0.4.27
+python-multipart>=0.0.6
+
+# Image Processing
+Pillow>=9.5.0
+
+# PDF Generation Enhancement
+weasyprint>=59.0
+pdf2image>=1.16.0
+
+# Biometric Support
+face-recognition>=1.3.0
+opencv-python>=4.7.0
+
+# API Documentation
+fastapi-docs>=2.0.0
+
+# Monitoring & Logging
+structlog>=23.0.0
+
+# Background Tasks
+celery>=5.3.0
+redis>=4.5.0
+
+# File Storage
+aiofiles>=23.0.0
+
+# Validation
+pydantic>=2.0.0
+email-validator>=2.0.0

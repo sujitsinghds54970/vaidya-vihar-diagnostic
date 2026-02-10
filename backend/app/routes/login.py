@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
-from app.models.user import User
+
+from app.models import User
 from passlib.context import CryptContext
 
 router = APIRouter()

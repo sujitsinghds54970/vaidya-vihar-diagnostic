@@ -1,11 +1,48 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+import os
+from dotenv import load_dotenv
 
-# Replace with your actual PostgreSQL credentials
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:#postgre54970@localhost/vaidya_vihar"
+# Load environment variables
+load_dotenv()
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+# Database configuration
+DATABASE_URL = os.getenv(
+    "DATABASE_URL", 
+    "sqlite:///./vaidya_vihar.db"
+)
 
+# Create SQLAlchemy engine
+if DATABASE_URL.startswith("sqlite"):
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"check_same_thread": False}
+    )
+else:
+    engine = create_engine(DATABASE_URL)
+
+# Create SessionLocal class
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+# Create Base class for models
 Base = declarative_base()
+
+# Dependency to get DB session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# Database connection test
+def test_connection():
+    try:
+        db = SessionLocal()
+        db.execute("SELECT 1")
+        db.close()
+        return True
+    except Exception as e:
+        print(f"Database connection failed: {e}")
+        return False
