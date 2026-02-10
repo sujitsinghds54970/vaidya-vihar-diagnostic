@@ -1,0 +1,1 @@
+# vaidyavihar-diagnostic
