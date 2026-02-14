@@ -35,5 +35,8 @@ email-validator>=2.0.0
 # Redis Caching
 redis>=4.5.0
 
+# Rate Limiting
+slowapi>=0.1.8
+
 # File Storage
 aiofiles>=23.0.0
