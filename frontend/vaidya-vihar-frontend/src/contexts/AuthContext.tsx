@@ -75,7 +75,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       formData.append('username', username);
       formData.append('password', password);
 
-      const response = await axios.post('http://localhost:8000/api/auth/login', formData, {
+      // Use relative path for API - works with nginx reverse proxy
+      const API_BASE = window.location.origin;
+      const response = await axios.post(`${API_BASE}/api/auth/login`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -1,0 +1,29 @@
+#!/usr/bin/expect -f
+
+set timeout 60
+set server "142.93.212.173"
+set password "#Vaidyavihar54970digitalocean"
+
+log_user 1
+
+spawn ssh -o StrictHostKeyChecking=no root@$server
+expect {
+    "password:" { send "$password\r" }
+    "yes/no" { send "yes\r"; exp_continue }
+}
+expect "#"
+
+send "nginx -t && systemctl reload nginx\r"
+expect "#"
+
+send "sleep 2\r"
+expect "#"
+
+send "curl -k -I https://localhost | head -5\r"
+expect "#"
+
+send "curl -I http://localhost:3000 | head -5\r"
+expect "#"
+
+send "exit\r"
+expect eof

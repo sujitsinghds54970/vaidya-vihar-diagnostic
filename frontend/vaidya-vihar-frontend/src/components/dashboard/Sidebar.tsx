@@ -3,7 +3,7 @@ import { useAuth } from '../../contexts/AuthContext'
 
 interface SidebarProps {
   activeTab: string
-  setActiveTab: (tab: string) => void
+  setActiveTab: (tab: any) => void
 }
 
 export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
@@ -17,6 +17,13 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
     { id: 'inventory', label: 'Inventory', icon: '📦' },
     { id: 'analytics', label: 'Analytics', icon: '📈' },
     { id: 'reports', label: 'Reports', icon: '📋' },
+    // New Features
+    { id: 'lis', label: 'LIS Lab Tests', icon: '🧪' },
+    { id: 'payments', label: 'Payments', icon: '💳' },
+    { id: 'accounting', label: 'Accounting', icon: '💰' },
+    { id: 'hr', label: 'HR & Leave', icon: '👔' },
+    { id: 'doctor-portal', label: 'Doctor Portal', icon: '🩺' },
+    { id: 'patient-portal', label: 'Patient Portal', icon: '🏥' },
   ]
 
   const handleTabChange = (tabId: string) => {

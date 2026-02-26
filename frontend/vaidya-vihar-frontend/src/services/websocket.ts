@@ -1,7 +1,14 @@
 import { io, Socket } from 'socket.io-client';
 import { useEffect, useRef, useCallback, useState } from 'react';
 
-const SOCKET_URL = process.env.REACT_APP_WS_URL || 'http://localhost:8000';
+// Get WebSocket URL based on current location
+const getWebSocketUrl = () => {
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const host = window.location.host;
+  return process.env.REACT_APP_WS_URL || `${protocol}//${host}`;
+};
+
+const SOCKET_URL = getWebSocketUrl();
 
 interface Notification {
   id: string;

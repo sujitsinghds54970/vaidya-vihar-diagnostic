@@ -1,0 +1,146 @@
+#!/usr/bin/expect -f
+
+set timeout 300
+set server "142.93.212.173"
+set password "#Vaidyavihar54970digitalocean"
+
+log_user 1
+
+send_user "\n============================================\n"
+send_user "VaidyaVihar ERP - Using Existing Containers\n"
+send_user "============================================\n\n"
+
+spawn ssh -o StrictHostKeyChecking=no root@$server
+expect {
+    "password:" { send "$password\r" }
+    "yes/no" { send "yes\r"; exp_continue }
+}
+expect "#"
+send_user "\n✓ Connected to server\n\n"
+
+# Check existing containers
+send_user "=== Checking existing containers ===\n"
+send "docker ps -a\r"
+expect "#"
+
+# Stop nginx
+send_user "\n=== Stopping Nginx ===\n"
+send "systemctl stop nginx\r"
+expect "#"
+
+# Remove old configs
+send_user "=== Removing old configurations ===\n"
+send "rm -f /etc/nginx/sites-enabled/*\r"
+expect "#"
+
+# Find which ports the existing containers are using
+send_user "=== Detecting container ports ===\n"
+send "docker ps -a --format '{{.Names}} {{.Ports}}'\r"
+expect "#"
+
+# Create new Nginx config for existing containers
+send_user "=== Creating new Nginx configuration ===\n"
+send "cat > /etc/nginx/sites-available/vaidyavihar-erp << 'EOF'
+server {
+    listen 80;
+    server_name vaidyavihar.com www.vaidyavihar.com 142.93.212.173;
+    return 301 https://\$host\$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name vaidyavihar.com www.vaidyavihar.com 142.93.212.173;
+
+    ssl_certificate /etc/nginx/ssl/cert.pem;
+    ssl_certificate_key /etc/nginx/ssl/key.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    location / {
+        proxy_pass http://localhost:80;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_cache_bypass \$http_upgrade;
+    }
+
+    location /api/ {
+        proxy_pass http://localhost:8000/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        add_header 'Access-Control-Allow-Origin' '*' always;
+    }
+
+    location /docs {
+        proxy_pass http://localhost:8000/docs;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+    }
+
+    location /health {
+        proxy_pass http://localhost:8000/health;
+    }
+}
+EOF\r"
+expect "#"
+
+# Enable site
+send "ln -sf /etc/nginx/sites-available/vaidyavihar-erp /etc/nginx/sites-enabled/\r"
+expect "#"
+
+# Create SSL if not exists
+send_user "=== Setting up SSL certificates ===\n"
+send "mkdir -p /etc/nginx/ssl\r"
+expect "#"
+send "if \[ ! -f /etc/nginx/ssl/cert.pem \]; then openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/key.pem -out /etc/nginx/ssl/cert.pem -subj \"/C=IN/ST=State/L=City/O=VaidyaVihar/CN=vaidyavihar.com\" 2>&1 | tail -3; fi\r"
+expect "#"
+
+# Start existing containers
+send_user "\n=== Starting existing containers ===\n"
+send "docker start vaidya_vihar_backend vaidya_vihar_frontend 2>/dev/null || echo 'Containers already running or different names'\r"
+expect "#"
+send "sleep 3\r"
+expect "#"
+
+# Test and start Nginx
+send_user "\n=== Starting Nginx ===\n"
+send "nginx -t\r"
+expect "#"
+send "systemctl start nginx\r"
+expect "#"
+send "systemctl enable nginx\r"
+expect "#"
+
+# Check status
+send_user "\n=== Checking deployment status ===\n"
+send "docker ps --format 'table {{.Names}}\\t{{.Status}}\\t{{.Ports}}'\r"
+expect "#"
+
+send_user "\n=== Testing services ===\n"
+send "sleep 2\r"
+expect "#"
+send "curl -s http://localhost:8000/health || curl -s http://localhost:8000/ | head -5\r"
+expect "#"
+send "curl -s -I http://localhost:80 | head -3 || curl -s -I http://localhost:3000 | head -3\r"
+expect "#"
+
+send_user "\n=== Checking Nginx ===\n"
+send "systemctl status nginx --no-pager | head -5\r"
+expect "#"
+
+send_user "\n============================================\n"
+send_user "DEPLOYMENT COMPLETE!\n"
+send_user "============================================\n"
+send_user "Your ERP is now accessible at:\n"
+send_user "  - https://vaidyavihar.com\n"
+send_user "  - https://142.93.212.173\n"
+send_user "============================================\n\n"
+
+send "exit\r"
+expect eof

@@ -1,12 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+import os
 
-DATABASE_URL = "postgresql://sujit_admin:#vaidyavihar54970@localhost:5432/vaidya_vihar"
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://vaidya_user:vaidya_password_123@postgres:5432/vaidya_vihar_db")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()
-from sqlalchemy.orm import Session
 
 def get_db():
     db = SessionLocal()
@@ -14,4 +14,4 @@ def get_db():
         yield db
     finally:
         db.close()
-        
+

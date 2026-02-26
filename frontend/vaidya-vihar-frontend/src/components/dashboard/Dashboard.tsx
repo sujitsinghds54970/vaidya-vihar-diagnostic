@@ -9,8 +9,14 @@ import StaffManagement from './StaffManagement'
 import InventoryManagement from './InventoryManagement'
 import Analytics from './Analytics'
 import Reports from './Reports'
+import LIS from './LIS'
+import Payments from './Payments'
+import Accounting from './Accounting'
+import HR from './HR'
+import PatientPortal from './PatientPortal'
+import DoctorDashboard from './DoctorDashboard'
 
-type ActiveTab = 'overview' | 'patients' | 'daily-entry' | 'staff' | 'inventory' | 'analytics' | 'reports'
+type ActiveTab = 'overview' | 'patients' | 'daily-entry' | 'staff' | 'inventory' | 'analytics' | 'reports' | 'lis' | 'payments' | 'accounting' | 'hr' | 'doctor-portal' | 'patient-portal'
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('overview')
@@ -32,6 +38,18 @@ export default function Dashboard() {
         return <Analytics />
       case 'reports':
         return <Reports />
+      case 'lis':
+        return <LIS activeTab={activeTab} />
+      case 'payments':
+        return <Payments activeTab={activeTab} />
+      case 'accounting':
+        return <Accounting activeTab={activeTab} />
+      case 'hr':
+        return <HR activeTab={activeTab} />
+      case 'doctor-portal':
+        return <DoctorDashboard doctorId={1} />
+      case 'patient-portal':
+        return <PatientPortal activeTab={activeTab} />
       default:
         return <Overview />
     }

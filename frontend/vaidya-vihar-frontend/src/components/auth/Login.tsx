@@ -95,12 +95,12 @@ export default function Login({ onSwitchToRegistration }: LoginProps) {
 
           <div className="text-center">
             <div className="text-sm text-gray-600 mb-4">
-              <p className="mb-2">Updated Credentials:</p>
+              <p className="mb-2">Login Credentials:</p>
               <p className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">
                 Username: admin
               </p>
               <p className="font-mono text-xs bg-gray-100 px-2 py-1 rounded mt-1">
-                Password: VaidyaVihar2024!
+                Password: admin123
               </p>
             </div>
             <div className="text-sm text-gray-600">

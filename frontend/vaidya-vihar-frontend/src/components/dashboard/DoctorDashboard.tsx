@@ -73,9 +73,10 @@ export default function DoctorDashboard({ doctorId }: DoctorDashboardProps) {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
+      const API_BASE = window.location.origin;
       const [reportsRes, statsRes] = await Promise.all([
-        axios.get(`http://localhost:8000/api/reports/pending-for-doctor/${doctorId}`),
-        axios.get(`http://localhost:8000/api/doctors/${doctorId}/portal-dashboard`)
+        axios.get(`${API_BASE}/api/reports/pending-for-doctor/${doctorId}`),
+        axios.get(`${API_BASE}/api/doctors/${doctorId}/portal-dashboard`)
       ]);
 
       setReports(reportsRes.data.reports || []);
@@ -98,7 +99,8 @@ export default function DoctorDashboard({ doctorId }: DoctorDashboardProps) {
     setViewDialogOpen(true);
 
     try {
-      await axios.post(`http://localhost:8000/api/reports/${report.id}/acknowledge`, {
+      const API_BASE = window.location.origin;
+      await axios.post(`${API_BASE}/api/reports/${report.id}/acknowledge`, {
         action: 'view'
       });
       fetchDashboardData();
@@ -109,7 +111,8 @@ export default function DoctorDashboard({ doctorId }: DoctorDashboardProps) {
 
   const handleDownloadReport = async (reportId: number) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/reports/distribution/${reportId}`, {
+      const API_BASE = window.location.origin;
+      const response = await axios.get(`${API_BASE}/api/reports/distribution/${reportId}`, {
         responseType: 'blob'
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -120,7 +123,7 @@ export default function DoctorDashboard({ doctorId }: DoctorDashboardProps) {
       link.click();
       link.remove();
 
-      await axios.post(`http://localhost:8000/api/reports/${reportId}/acknowledge`, {
+      await axios.post(`${API_BASE}/api/reports/${reportId}/acknowledge`, {
         action: 'download'
       });
       fetchDashboardData();

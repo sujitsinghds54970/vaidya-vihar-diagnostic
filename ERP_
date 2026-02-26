@@ -1,0 +1,300 @@
+# VaidyaVihar Diagnostic ERP - Complete Owner Guide
+
+## 🌐 Access Information
+
+**Live URL:** https://vaidyavihar.com
+**Backend API:** https://vaidyavihar.com/api
+
+### Login Credentials
+- **Username:** admin
+- **Password:** admin123
+
+---
+
+## 📋 Current Features
+
+### 1. Patient Management
+- Register new patients with complete details
+- View patient history and medical records
+- Search and filter patients
+- Patient demographics (name, age, contact, address)
+
+### 2. Daily Entry / Visit Tracking
+- Record daily patient visits
+- Track consultation fees
+- Track test costs
+- Payment status (paid/pending)
+- Doctor assignments
+
+### 3. Inventory Management
+- Track medical supplies and reagents
+- Stock levels monitoring
+- Low stock alerts
+- Supplier management
+- Expiry date tracking
+
+### 4. Staff Management
+- Employee registration
+- Department assignment
+- Position tracking
+- Salary management
+- Attendance tracking
+
+### 5. Branch Management
+- Multiple branch support
+- Branch-wise data segregation
+- Cross-branch reporting
+
+### 6. Analytics & Reports
+- Daily revenue reports
+- Patient statistics
+- Test statistics
+- Branch-wise comparison
+- Financial summaries
+
+### 7. Appointments
+- Schedule patient appointments
+- Doctor availability
+- Appointment status tracking
+
+### 8. Billing & Invoices
+- Generate invoices
+- Payment tracking
+- Multiple payment modes
+- Invoice history
+
+---
+
+## 🔐 Security Features (Currently Implemented)
+
+1. **JWT Token Authentication** - Secure login tokens
+2. **Role-Based Access Control (RBAC)**
+3. **Password Hashing** - Bcrypt encryption
+4. **Activity Logging** - Track user actions
+5. **HTTPS/SSL** - Secure connection
+
+### User Roles:
+- **super_admin** - Full system access (you)
+- **branch_admin** - Branch-level admin
+- **staff** - Limited access employees
+- **patient** - Patient portal access
+
+---
+
+## 🗄️ Database Access & Management
+
+### Database Credentials
+```
+Host: 142.93.212.173
+Port: 5432
+Database: vaidya_vihar_db
+Username: vaidya_user
+Password: vaidya_password_123
+```
+
+### How to Connect to PostgreSQL
+
+#### Option 1: Via Command Line (SSH)
+```
+bash
+ssh root@142.93.212.173
+docker exec -it vaidya_vihar_db psql -U vaidya_user -d vaidya_vihar_db
+```
+
+#### Option 2: Using pgAdmin or DBeaver
+- Create new connection with above credentials
+- Connect to: 142.93.212.173:5432
+
+#### Option 3: Connect from your local machine
+```
+bash
+psql -h 142.93.212.173 -p 5432 -U vaidya_user -d vaidya_vihar_db
+```
+
+### Useful SQL Commands
+
+#### View all users:
+```
+sql
+SELECT id, username, email, role, branch_id, is_active FROM users;
+```
+
+#### Create new branch admin:
+```
+sql
+INSERT INTO users (username, email, hashed_password, first_name, last_name, phone, role, branch_id, is_active)
+VALUES ('branchadmin1', 'branch1@vaidyavihar.com', '$2b$12$hashedpasswordhere', 'John', 'Doe', '+91-9876543210', 'branch_admin', 1, true);
+```
+
+#### Create new staff:
+```
+sql
+INSERT INTO users (username, email, hashed_password, first_name, last_name, phone, role, branch_id, is_active)
+VALUES ('staff1', 'staff1@vaidyavihar.com', '$2b$12$hashedpasswordhere', 'Jane', 'Smith', '+91-9876543211', 'staff', 1, true);
+```
+
+---
+
+## 🏢 Managing Multiple Branches
+
+### 1. Create New Branch
+```
+sql
+INSERT INTO branches (name, location, address, city, state, pincode, phone, email, is_active)
+VALUES ('Branch Name', 'Location', 'Full Address', 'City', 'State', '123456', '+91-Phone', 'email@branch.com', true);
+```
+
+### 2. Assign Users to Branches
+Update user's `branch_id` to link them to a specific branch.
+
+### 3. Branch-specific Access
+- Branch admins can only see their branch data
+- Super admin can see all branches
+- Staff are assigned to specific branches
+
+---
+
+## 🔧 How to Create New Users
+
+### Method 1: Via API (using admin token)
+```
+bash
+curl -X POST https://vaidyavihar.com/api/auth/register \
+  -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "newuser",
+    "email": "newuser@email.com",
+    "password": "password123",
+    "first_name": "First",
+    "last_name": "Last",
+    "phone": "+91-9876543210",
+    "role": "staff",
+    "branch_id": 1
+  }'
+```
+
+### Method 2: Direct Database Insert
+Use bcrypt to hash password first, then insert.
+
+---
+
+## 💡 Recommendations for Expansion
+
+### Features to Add:
+
+1. **Laboratory Information System (LIS)**
+   - Test ordering
+   - Sample tracking
+   - Result entry
+   - PDF report generation
+
+2. **SMS/WhatsApp Notifications**
+   - Appointment reminders
+   - Result notifications
+   - SMS alerts (Twilio, WhatsApp Business API)
+
+3. **Payment Integration**
+   - Razorpay/PayU integration
+   - UPI payments
+   - Online appointment booking
+
+4. **Doctor Portal**
+   - Doctor login
+   - View patients
+   - Write prescriptions
+   - View analytics
+
+5. **Patient Portal**
+   - View own reports
+   - Book appointments
+   - Payment history
+
+6. **Accounting Module**
+   - Expense tracking
+   - Profit/Loss reports
+   - Tax management
+
+7. **HR Module**
+   - Leave management
+   - Payroll
+   - Performance reviews
+
+8. **Multi-language Support**
+   - Hindi, regional languages
+
+9. **Mobile App**
+   - React Native/Flutter app
+   - Push notifications
+
+10. **AI/ML Features**
+    - Patient trend analysis
+    - Inventory prediction
+    - Revenue forecasting
+
+---
+
+## 🛡️ Security Best Practices
+
+1. **Change default admin password regularly**
+2. **Use strong passwords** (min 12 chars, mixed case, numbers, symbols)
+3. **Enable 2FA** (add later)
+4. **Regular backups** - We have automated backups
+5. **Monitor logs** - Check activity regularly
+6. **SSL Certificate Renewal** - Auto-renewal enabled
+7. **Firewall** - Only essential ports open
+
+---
+
+## 📊 Current System Status
+
+| Component | Status |
+|-----------|--------|
+| Frontend | ✅ Running |
+| Backend API | ✅ Running |
+| PostgreSQL | ✅ Running |
+| Redis | ✅ Running |
+| SSL Certificate | ✅ Active |
+| Domain | ✅ pointing to vaidyavihar.com |
+
+---
+
+## 📞 Support & Maintenance
+
+### Common Tasks:
+
+#### Restart Services:
+```
+bash
+docker-compose restart
+```
+
+#### View Logs:
+```
+bash
+docker-compose logs -f backend
+```
+
+#### Backup Database:
+```
+bash
+./scripts/backup-database.sh
+```
+
+#### Update Frontend:
+Rebuild and redeploy the frontend container.
+
+---
+
+## 🎯 Quick Start for New Branch Setup
+
+1. Create branch in database
+2. Create branch admin user
+3. Create staff users for branch
+4. Configure inventory for branch
+5. Train staff on system usage
+
+---
+
+*Last Updated: February 2026*
+*Version: 2.0.0*

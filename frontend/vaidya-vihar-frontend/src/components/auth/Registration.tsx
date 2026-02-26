@@ -38,7 +38,8 @@ export default function Registration({ onSwitchToLogin }: RegistrationProps) {
   const loadBranches = async () => {
     try {
       setLoadingBranches(true);
-      const response = await axios.get('http://localhost:8000/api/auth/branches');
+      const API_BASE = window.location.origin;
+      const response = await axios.get(`${API_BASE}/api/auth/branches`);
       setBranches(response.data);
     } catch (error) {
       console.error('Failed to load branches:', error);
@@ -99,7 +100,8 @@ export default function Registration({ onSwitchToLogin }: RegistrationProps) {
         branch_id: formData.branchId ? parseInt(formData.branchId) : null
       };
 
-      await axios.post('http://localhost:8000/api/auth/public-register', registrationData);
+      const API_BASE = window.location.origin;
+      await axios.post(`${API_BASE}/api/auth/public-register`, registrationData);
       
       toast.success('Registration successful! Please log in with your credentials.');
       onSwitchToLogin();
