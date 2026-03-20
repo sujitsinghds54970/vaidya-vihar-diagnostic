@@ -14,9 +14,9 @@ sys.path.insert(0, str(backend_dir))
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
-from passlib.context import CryptContext
 from datetime import datetime, date
 import logging
+import bcrypt
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -73,8 +73,12 @@ try:
 except Exception as e:
     logger.warning(f"⚠ Doctor models import failed: {e}")
 
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Password hashing function
+def hash_password(password: str) -> str:
+    """Hash password using bcrypt"""
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed.decode('utf-8')
 
 def create_tables():
     """Create all database tables"""
@@ -132,7 +136,7 @@ def create_admin_user(db, branch_id):
             logger.info("ℹ️  Admin user already exists")
             return existing_admin
         
-        hashed_password = pwd_context.hash("admin123")
+        hashed_password = hash_password("admin123")
         
         admin = User(
             username="admin",
