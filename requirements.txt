@@ -1,0 +1,55 @@
+# VaidyaVihar Diagnostic ERP - Python Dependencies
+# This file is for Digital Ocean detection
+# Actual dependencies are in backend/requirements.txt
+
+# Core Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Database
+sqlalchemy==2.0.23
+alembic==1.12.1
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.1.1
+python-dotenv==1.0.0
+
+# CORS
+fastapi-cors==0.0.6
+
+# Rate Limiting
+slowapi==0.1.9
+
+# Validation
+pydantic==2.5.0
+pydantic-settings==2.1.0
+email-validator==2.1.0
+
+# Excel/PDF Generation
+openpyxl==3.1.2
+reportlab==4.0.7
+pillow==10.1.0
+
+# QR Code
+qrcode==7.4.2
+
+# Date/Time
+python-dateutil==2.8.2
+
+# HTTP Requests
+httpx==0.25.2
+requests==2.31.0
+
+# WebSocket
+websockets==12.0
+
+# For production
+gunicorn==21.2.0
+psycopg2-binary==2.9.9
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
