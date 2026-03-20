@@ -16,7 +16,7 @@ from datetime import datetime, timedelta
 import uuid
 import random
 
-from app.utils.database import get_db
+from app.database import get_db
 from app.utils.auth_system import auth_guard, require_staff, get_current_user, require_role
 from app.models import User, Branch, Patient, LabResult, Doctor as DoctorModel
 from app.models.doctor import (
@@ -842,7 +842,7 @@ def get_doctors_analytics(
 
 @router.get("/doctors/export")
 def export_doctors(
-    format: str = Query("excel", regex="^(excel|csv|pdf)$"),
+    format: str = Query("excel", pattern="^(excel|csv|pdf)$"),
     current_user: User = Depends(require_role(["admin", "branch_admin"])),
     db: Session = Depends(get_db)
 ):

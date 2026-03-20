@@ -4,7 +4,7 @@ from sqlalchemy import and_, or_, desc
 from typing import List, Optional
 from datetime import datetime, timedelta
 
-from app.utils.database import get_db
+from app.database import get_db
 from app.utils.auth_system import auth_guard, require_staff, get_current_user
 from app.models import User, Branch, InventoryItem, StockMovement
 from pydantic import BaseModel, Field

@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional, Dict
 from datetime import datetime
 
-from app.utils.database import get_db
+from app.database import get_db
 from app.utils.auth_system import require_staff, get_current_user
 from app.services.ai_service import (
     SymptomAnalyzer, PredictiveAnalytics, RiskAssessmentEngine,
@@ -28,7 +28,7 @@ router = APIRouter()
 class SymptomInput(BaseModel):
     """Symptom input for analysis"""
     name: str = Field(..., min_length=2, description="Symptom name")
-    severity: str = Field("moderate", regex="^(low|moderate|high|critical)$")
+    severity: str = Field("moderate", pattern="^(low|moderate|high|critical)$")
     duration_days: int = Field(1, ge=1, description="Duration in days")
     body_part: Optional[str] = Field(None, description="Affected body part")
     description: Optional[str] = Field(None, description="Additional description")
@@ -38,7 +38,7 @@ class TestRecommendationRequest(BaseModel):
     """Request for test recommendations"""
     symptoms: List[SymptomInput]
     age: int = Field(..., ge=0, le=150)
-    gender: str = Field(..., regex="^(male|female|other)$")
+    gender: str = Field(..., pattern="^(male|female|other)$")
     medical_history: Optional[List[str]] = Field(default_factory=list)
 
 
@@ -55,7 +55,7 @@ class TestRecommendationResponse(BaseModel):
 class RiskAssessmentRequest(BaseModel):
     """Risk assessment request"""
     age: int = Field(..., ge=0, le=150)
-    gender: str = Field(..., regex="^(male|female|other)$")
+    gender: str = Field(..., pattern="^(male|female|other)$")
     medical_history: Optional[List[str]] = Field(default_factory=list)
     lab_results: Optional[Dict[str, float]] = Field(default_factory=dict)
     lifestyle_factors: Optional[Dict[str, str]] = Field(default_factory=dict)
@@ -260,7 +260,7 @@ def predict_revenue(
     branch_id: int,
     historical_data: List[Dict],
     days_ahead: int = Query(30, ge=1, le=90),
-    current_user = Depends(require_role(["admin", "branch_admin"]))
+    current_user = Depends(require_staff)
 ):
     """
     Predict revenue for upcoming period based on historical data.

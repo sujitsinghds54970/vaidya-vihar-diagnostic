@@ -15,7 +15,7 @@ from typing import Optional, List
 from datetime import datetime, timedelta, date
 import uuid
 
-from app.utils.database import get_db
+from app.database import get_db
 from app.models.hr import (
     LeaveRequest, LeaveBalance, LeavePolicy, LeaveStatus, LeaveType,
     Attendance, AttendanceStatus, Holiday, EmployeeProfile, WorkShift

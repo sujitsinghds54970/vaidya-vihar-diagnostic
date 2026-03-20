@@ -1,4 +1,4 @@
-from app.utils.database import engine, Base
+from app.database import engine, Base
 from app.models.branch import Branch
 from app.models.calendar_day import CalendarDay  # Add more models as you build them
 

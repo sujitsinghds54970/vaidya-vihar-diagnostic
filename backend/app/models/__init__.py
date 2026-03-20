@@ -1,7 +1,13 @@
+from app.models.doctor import Doctor
+from app.models.payment import Invoice, InvoiceItem, Payment
+from app.models.lab_result import LabResult
+from app.models.appointment import Appointment
+from app.models.calendar_day import CalendarDay
+from app.models.release_day import ReleaseDay
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, Text, Float, DECIMAL
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from app.utils.database import Base
+from app.database import Base
 
 class Branch(Base):
     __tablename__ = "branches"
@@ -16,6 +22,9 @@ class Branch(Base):
     phone = Column(String(15), nullable=False)
     email = Column(String(100), nullable=False)
     license_number = Column(String(100), unique=True)
+    branch_code = Column(String(20), unique=True, nullable=False)
+    opening_hours = Column(String(500), nullable=True)
+    facilities = Column(Text, nullable=True)
     established_date = Column(DateTime, default=func.now())
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=func.now())
@@ -27,8 +36,8 @@ class Branch(Base):
     daily_entries = relationship("DailyEntry", back_populates="branch")
     staff = relationship("Staff", back_populates="branch")
     inventory_items = relationship("InventoryItem", back_populates="branch")
-    appointments = relationship("Appointment", back_populates="branch")
     invoices = relationship("Invoice", back_populates="branch")
+    calendar_days = relationship("CalendarDay", back_populates="branch")
 
 class User(Base):
     __tablename__ = "users"
@@ -286,120 +295,6 @@ class StockMovement(Base):
     approver = relationship("User", foreign_keys=[approved_by])
 
 
-class Appointment(Base):
-    __tablename__ = "appointments"
-
-    id = Column(Integer, primary_key=True, index=True)
-    branch_id = Column(Integer, ForeignKey("branches.id"), nullable=False)
-    patient_id = Column(Integer, ForeignKey("patients.id"), nullable=False)
-    
-    # Appointment Details
-    appointment_date = Column(DateTime, nullable=False)
-    appointment_time = Column(String(10), nullable=False)  # HH:MM format
-    appointment_type = Column(String(50), nullable=False)  # consultation, test, follow_up
-    department = Column(String(100), nullable=False)
-    
-    # Doctor Information
-    doctor_name = Column(String(200), nullable=False)
-    doctor_specialization = Column(String(100), nullable=True)
-    
-    # Status & Notes
-    status = Column(String(20), default="scheduled")  # scheduled, confirmed, completed, cancelled, no_show
-    notes = Column(Text, nullable=True)
-    
-    # Timing
-    check_in_time = Column(DateTime, nullable=True)
-    completion_time = Column(DateTime, nullable=True)
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
-    
-    # Relationships
-    branch = relationship("Branch", back_populates="appointments")
-    patient = relationship("Patient", back_populates="appointments")
-
-class Invoice(Base):
-    __tablename__ = "invoices"
-
-    id = Column(Integer, primary_key=True, index=True)
-    branch_id = Column(Integer, ForeignKey("branches.id"), nullable=False)
-    patient_id = Column(Integer, ForeignKey("patients.id"), nullable=False)
-    
-    # Invoice Details
-    invoice_number = Column(String(50), unique=True, nullable=False)
-    invoice_date = Column(DateTime, default=func.now())
-    due_date = Column(DateTime, nullable=True)
-    
-    # Amount Details
-    subtotal = Column(DECIMAL(12, 2), nullable=False)
-    tax_amount = Column(DECIMAL(10, 2), default=0)
-    discount_amount = Column(DECIMAL(10, 2), default=0)
-    total_amount = Column(DECIMAL(12, 2), nullable=False)
-    paid_amount = Column(DECIMAL(12, 2), default=0)
-    balance_amount = Column(DECIMAL(12, 2), nullable=False)
-    
-    # Payment Details
-    payment_status = Column(String(20), default="pending")  # pending, partial, paid, overdue
-    payment_method = Column(String(20), nullable=True)  # cash, card, online, insurance
-    payment_date = Column(DateTime, nullable=True)
-    
-    # Status & Notes
-    status = Column(String(20), default="draft")  # draft, sent, paid, cancelled, refunded
-    notes = Column(Text, nullable=True)
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
-    
-    # Relationships
-    branch = relationship("Branch", back_populates="invoices")
-    patient = relationship("Patient", back_populates="invoices")
-    invoice_items = relationship("InvoiceItem", back_populates="invoice")
-
-class InvoiceItem(Base):
-    __tablename__ = "invoice_items"
-
-    id = Column(Integer, primary_key=True, index=True)
-    invoice_id = Column(Integer, ForeignKey("invoices.id"), nullable=False)
-    
-    # Item Details
-    item_name = Column(String(200), nullable=False)
-    item_description = Column(Text, nullable=True)
-    quantity = Column(Integer, nullable=False)
-    unit_price = Column(DECIMAL(10, 2), nullable=False)
-    total_price = Column(DECIMAL(10, 2), nullable=False)
-    
-    # Relationships
-    invoice = relationship("Invoice", back_populates="invoice_items")
-
-class LabResult(Base):
-    __tablename__ = "lab_results"
-
-    id = Column(Integer, primary_key=True, index=True)
-    branch_id = Column(Integer, ForeignKey("branches.id"), nullable=False)
-    patient_id = Column(Integer, ForeignKey("patients.id"), nullable=False)
-    
-    # Test Details
-    test_name = Column(String(200), nullable=False)
-    test_category = Column(String(100), nullable=False)  # blood_test, urine_test, etc.
-    test_date = Column(DateTime, nullable=False)
-    result_date = Column(DateTime, default=func.now())
-    
-    # Test Results
-    results = Column(Text, nullable=False)  # JSON or detailed text
-    normal_range = Column(String(200), nullable=True)
-    interpretation = Column(Text, nullable=True)
-    status = Column(String(20), default="pending")  # pending, completed, reviewed, reported
-    
-    # Doctor Information
-    requested_by = Column(String(200), nullable=True)
-    reviewed_by = Column(String(200), nullable=True)
-    lab_technician = Column(String(200), nullable=True)
-    
-    # Files & Reports
-    report_file_path = Column(String(500), nullable=True)
-    is_pdf_generated = Column(Boolean, default=False)
-    
-    # Relationships
-    branch = relationship("Branch")
-    patient = relationship("Patient", back_populates="lab_results")
 
 class ActivityLog(Base):
     __tablename__ = "activity_logs"

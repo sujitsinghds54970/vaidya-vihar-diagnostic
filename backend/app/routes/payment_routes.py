@@ -19,7 +19,7 @@ import hashlib
 import json
 import os
 
-from app.utils.database import get_db
+from app.database import get_db
 from app.models.payment import (
     Payment, PaymentStatus, PaymentMode, PaymentGateway, PaymentLink, 
     Invoice, InvoiceItem, PaymentSettings

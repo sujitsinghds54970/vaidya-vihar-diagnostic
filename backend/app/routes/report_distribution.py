@@ -14,11 +14,12 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_, desc, func
 from typing import List, Optional
 from datetime import datetime, timedelta
+from pydantic import BaseModel, Field
 import uuid
 import random
 import json
 
-from app.utils.database import get_db
+from app.database import get_db
 from app.utils.auth_system import auth_guard, require_staff, get_current_user, require_role
 from app.models import User, Branch, Patient, LabResult
 from app.models.doctor import (
@@ -39,7 +40,7 @@ class ReportDistributionCreate(BaseModel):
     """Schema for creating report distribution"""
     lab_result_id: int
     doctor_ids: Optional[List[int]] = None  # If None, auto-distribute to referring doctors
-    priority: str = Field("normal", regex="^(normal|high|urgent)$")
+    priority: str = Field("normal", pattern="^(normal|high|urgent)$")
     delivery_methods: Optional[List[str]] = ["portal", "email", "sms", "whatsapp"]
     force_delivery: bool = False  # Force delivery even if not referring doctor
 
@@ -331,7 +332,7 @@ async def distribute_report(
 async def distribute_report_to_all_relevant_doctors(
     lab_result_id: int,
     delivery_methods: Optional[List[str]] = Query(["portal", "email"]),
-    priority: str = Query("normal", regex="^(normal|high|urgent)$"),
+    priority: str = Query("normal", pattern="^(normal|high|urgent)$"),
     current_user: User = Depends(require_role(["admin", "branch_admin"])),
     db: Session = Depends(get_db)
 ):
@@ -535,7 +536,7 @@ def get_pending_reports_for_doctor(
 @router.post("/reports/{distribution_id}/acknowledge")
 async def acknowledge_report(
     distribution_id: int,
-    action: str = Query("view", regex="^(view|download|print|acknowledge)$"),
+    action: str = Query("view", pattern="^(view|download|print|acknowledge)$"),
     current_user: User = Depends(require_staff),
     db: Session = Depends(get_db)
 ):

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.utils.database import SessionLocal
+from app.database import SessionLocal
 from app.models.inventory_item import InventoryItem
 
 router = APIRouter()

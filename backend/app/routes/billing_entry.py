@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.utils.database import SessionLocal
+from app.database import SessionLocal
 from app.models.billing_entry import BillingEntry
 from app.utils.auth_guard import get_current_user
 from app.models.user import User

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from fastapi import Depends
-from app.utils.database import get_db
+from app.database import get_db
 from app.utils.auth_guard import get_current_user
 from sqlalchemy.orm import Session
 from app.models.user import User

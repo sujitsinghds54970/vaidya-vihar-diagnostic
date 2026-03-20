@@ -6,7 +6,7 @@ from datetime import datetime
 import os
 from io import BytesIO
 
-from app.utils.database import get_db
+from app.database import get_db
 from app.utils.auth_system import auth_guard, require_staff, get_current_user
 from app.models import User, Branch
 from app.schemas.user import MonthlyReportRequest, ExportResponse

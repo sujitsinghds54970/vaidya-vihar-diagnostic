@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from typing import Optional
 
-from app.utils.database import get_db
+from app.database import get_db
 from app.utils.auth_system import (
     authenticate_user, create_user_token, update_last_login,
     auth_guard, TokenData, get_current_user

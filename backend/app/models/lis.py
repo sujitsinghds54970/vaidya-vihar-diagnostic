@@ -11,7 +11,7 @@ Enhanced lab testing with:
 from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey, Text, Enum as SQLEnum, JSON
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app.utils.database import Base
+from app.database import Base
 import enum
 
 
@@ -319,9 +319,9 @@ class TestResult(Base):
     order_item = relationship("TestOrderItem")
 
 
-class ReportTemplate(Base):
+class LISReportTemplate(Base):
     """Report templates for different test types"""
-    __tablename__ = "report_templates"
+    __tablename__ = "lis_report_templates"
 
     id = Column(Integer, primary_key=True, index=True)
     template_name = Column(String, nullable=False)
@@ -357,7 +357,7 @@ class GeneratedReport(Base):
     
     # Report details
     report_type = Column(String, nullable=False)
-    template_id = Column(Integer, ForeignKey("report_templates.id"), nullable=True)
+    template_id = Column(Integer, ForeignKey("lis_report_templates.id"), nullable=True)
     
     # File
     file_path = Column(String, nullable=True)
@@ -381,7 +381,7 @@ class GeneratedReport(Base):
     
     # Relationships
     order = relationship("TestOrder")
-    template = relationship("ReportTemplate")
+    template = relationship("LISReportTemplate")
     authorizer = relationship("User")
 
 

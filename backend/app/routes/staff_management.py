@@ -5,7 +5,7 @@ from typing import List, Optional
 from datetime import datetime, timedelta, time
 from decimal import Decimal
 
-from app.utils.database import get_db
+from app.database import get_db
 from app.utils.auth_system import auth_guard, require_staff, get_current_user
 from app.models import User, Branch, Staff, AttendanceRecord, SalaryRecord
 from pydantic import BaseModel, Field

@@ -1,3 +1,7 @@
+"""
+Unified Database Configuration for VaidyaVihar Diagnostic ERP
+This is the single source of truth for database configuration
+"""
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -25,7 +29,7 @@ else:
 # Create SessionLocal class
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Create Base class for models
+# Create Base class for models - SINGLE SOURCE OF TRUTH
 Base = declarative_base()
 
 # Dependency to get DB session

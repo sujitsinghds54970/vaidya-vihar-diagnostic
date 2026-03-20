@@ -15,7 +15,7 @@ from typing import Optional, List
 from datetime import datetime, timedelta
 import uuid
 
-from app.utils.database import get_db
+from app.database import get_db
 from app.models.lis import (
     TestOrder, TestOrderItem, TestStatus, Sample, SampleType,
     TestResult, ResultFlag, TestCategory, LabTestMaster, GeneratedReport

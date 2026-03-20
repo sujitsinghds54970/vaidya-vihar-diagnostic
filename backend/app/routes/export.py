@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
-from app.utils.database import get_db
+from app.database import get_db
 from app.models.invoice import Invoice
 import csv
 import io

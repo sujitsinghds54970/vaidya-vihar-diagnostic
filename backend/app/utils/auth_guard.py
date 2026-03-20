@@ -2,7 +2,7 @@ from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
-from app.utils.database import SessionLocal
+from app.database import SessionLocal
 
 SECRET_KEY = "your_secret_key_here"
 ALGORITHM = "HS256"

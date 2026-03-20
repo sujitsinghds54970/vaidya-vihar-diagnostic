@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.utils.database import SessionLocal
+from app.database import SessionLocal
 from app.models.user import User
 from app.utils.auth_guard import get_current_user
 
@@ -37,7 +37,7 @@ def list_logs(
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app.utils.database import Base
+from app.database import Base
 
 class ActivityLog(Base):
     __tablename__ = "activity_logs"

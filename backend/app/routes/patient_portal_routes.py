@@ -17,7 +17,7 @@ import uuid
 import random
 import string
 
-from app.utils.database import get_db
+from app.database import get_db
 from app.models.patient_portal import (
     PatientPortalUser, PatientAppointment, PatientReportAccess,
     PatientFeedback, PatientFamilyMember, PatientDocument

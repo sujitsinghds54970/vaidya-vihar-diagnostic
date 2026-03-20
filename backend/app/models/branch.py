@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from app.utils.database import Base
+from app.database import Base
 
 class Branch(Base):
     __tablename__ = "branches"

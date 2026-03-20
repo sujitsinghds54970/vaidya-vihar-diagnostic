@@ -124,7 +124,7 @@ class EmailService:
         """Convert HTML to plain text"""
         import re
         text = re.sub('<[^<]+?>', '', html)
-        text = re.sub('\s+', ' ', text)
+        text = re.sub(r'\s+', ' ', text)
         return text.strip()
     
     # === Email Templates ===

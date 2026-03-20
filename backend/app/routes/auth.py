@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.utils.database import SessionLocal
+from app.database import SessionLocal
 from app.models.user import User
 from app.utils.security import hash_password, verify_password
 from jose import JWTError, jwt
@@ -69,7 +69,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import UserCreate, UserResponse
-from app.utils.database import get_db
+from app.database import get_db
 from app.utils.auth import hash_password, verify_password, create_access_token
 
 router = APIRouter()

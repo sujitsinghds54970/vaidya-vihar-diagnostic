@@ -12,7 +12,7 @@ Patient self-service module:
 from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey, Text, JSON
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app.utils.database import Base
+from app.database import Base
 
 
 class PatientPortalUser(Base):
@@ -202,7 +202,7 @@ class PatientFamilyMember(Base):
     
     # Family member details
     name = Column(String, nullable=False)
-    relationship = Column(String, nullable=False)
+    relation = Column(String, nullable=False)
     date_of_birth = Column(DateTime, nullable=True)
     gender = Column(String, nullable=True)
     

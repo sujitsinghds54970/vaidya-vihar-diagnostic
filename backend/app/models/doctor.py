@@ -8,7 +8,7 @@ in the city, including their patient report distribution preferences.
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, Text, DECIMAL, JSON
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from app.utils.database import Base
+from app.database import Base
 
 
 class Doctor(Base):
@@ -87,7 +87,6 @@ class Doctor(Base):
     branches = relationship("DoctorBranch", back_populates="doctor", cascade="all, delete-orphan")
     user = relationship("User", foreign_keys=[user_id])
     received_reports = relationship("ReportDistribution", back_populates="doctor", foreign_keys="ReportDistribution.doctor_id")
-    created_reports = relationship("LabResult", back_populates="referring_doctor", foreign_keys="LabResult.requested_by")
     notifications = relationship("DoctorNotification", back_populates="doctor")
     
     def __repr__(self):
@@ -356,4 +355,3 @@ class DoctorSchedule(Base):
 
     def __repr__(self):
         return f"<DoctorSchedule: Dr. {self.doctor_id} - Day {self.day_of_week}>"
-

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, Float, String, ForeignKey
 from sqlalchemy.orm import relationship
-from app.utils.database import Base
+from app.database import Base
 
 class ExpenseEntry(Base):
     __tablename__ = "expense_entries"

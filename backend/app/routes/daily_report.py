@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.utils.database import SessionLocal
+from app.database import SessionLocal
 from app.models.calendar_day import CalendarDay
 from app.models.expense_entry import ExpenseEntry
 from app.models.note_entry import NoteEntry

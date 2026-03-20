@@ -4,7 +4,7 @@ from fastapi.responses import StreamingResponse
 import csv
 from io import StringIO
 from app.models.user import User
-from app.utils.database import get_db
+from app.database import get_db
 from app.utils.auth_guard import get_current_user
 
 router = APIRouter()

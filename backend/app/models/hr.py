@@ -11,7 +11,7 @@ Leave management and HR module:
 from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey, Text, Enum as SQLEnum
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app.utils.database import Base
+from app.database import Base
 import enum
 
 
@@ -224,7 +224,7 @@ class Attendance(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     # Relationships
-    user = relationship("User")
+    user = relationship("User", foreign_keys=[user_id])
     approver = relationship("User", foreign_keys=[approved_by])
 
 
@@ -350,7 +350,7 @@ class EmployeeProfile(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     # Relationships
-    user = relationship("User")
+    user = relationship("User", foreign_keys=[user_id])
     shift = relationship("WorkShift")
     manager = relationship("User", foreign_keys=[reporting_to])
 

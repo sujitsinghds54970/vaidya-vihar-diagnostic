@@ -12,7 +12,7 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
-from app.utils.database import get_db
+from app.database import get_db
 from app.models import User, Branch, ActivityLog
 
 # Security Configuration
@@ -172,6 +172,7 @@ def update_last_login(db: Session, user: User):
 auth_guard = AuthGuard()
 get_current_user = auth_guard.get_current_user
 verify_token = auth_guard.verify_token
+require_role = auth_guard.require_role
 
 # Role-based dependencies
 require_super_admin = auth_guard.require_role(['super_admin'])

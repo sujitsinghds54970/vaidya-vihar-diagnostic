@@ -12,7 +12,7 @@ Enhanced payment tracking with support for:
 from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey, Text, Enum as SQLEnum
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app.utils.database import Base
+from app.database import Base
 import enum
 
 
@@ -84,8 +84,8 @@ class Invoice(Base):
     patient = relationship("Patient", back_populates="invoices")
     branch = relationship("Branch")
     payments = relationship("Payment", back_populates="invoice", cascade="all, delete-orphan")
-    lab_results = relationship("LabResult", back_populates="invoice")
     items = relationship("InvoiceItem", back_populates="invoice", cascade="all, delete-orphan")
+    lab_results = relationship("LabResult", back_populates="invoice", cascade="all, delete-orphan")
 
 
 class InvoiceItem(Base):

@@ -403,10 +403,11 @@ class SMSService:
     ) -> SMSResponse:
         """Send sample collection reminder SMS"""
         tests = ", ".join(test_names)
+        instructions_text = f"Instructions: {instructions}. " if instructions else ""
         body = (
             f"Dear {patient_name}, reminder for sample collection on {collection_date}. "
             f"Tests: {tests}. "
-            + (f"Instructions: {instructions}. " if instructions else "")
+            f"{instructions_text}"
             f"Please fast 8-10 hours before collection if required. "
             f"- VaidyaVihar Diagnostic"
         )

@@ -16,7 +16,24 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from app.models import Base
+from app.database import Base
+# Import all models to ensure they're registered
+from app.models import (
+    Branch, User, Patient, DailyEntry, Staff, AttendanceRecord,
+    SalaryRecord, InventoryItem, StockMovement, Appointment, Invoice,
+    InvoiceItem, LabResult, ActivityLog, SystemSettings
+)
+from app.models.lis import (
+    TestOrder, TestOrderItem, Sample, TestResult,
+    LabTestMaster, LISReportTemplate, GeneratedReport,
+    QualityControl, InstrumentCalibration
+)
+from app.models.payment import Payment, Refund
+from app.models.accounting import ExpenseEntry, ExpenseCategory, Transaction, Account
+from app.models.hr import LeaveRequest, EmployeeProfile, Attendance
+from app.models.patient_portal import PatientAppointment, PatientPrescription, PatientPortalUser
+from app.models.doctor import Doctor, DoctorBranch, ReportDistribution, DoctorNotification, DoctorSchedule
+
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
